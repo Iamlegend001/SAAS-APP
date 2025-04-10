@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 const Navbar = () => {
-  const [user, setUser] = useState(true);
+  const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
   return (
@@ -17,7 +18,10 @@ const Navbar = () => {
       {user ? (
         <div className="flex items-center gap-6">
           {/* Credits */}
-          <div className="flex items-center gap-2 bg-yellow-100 px-4 py-1 rounded-full hover:bg-yellow-200 transition-all duration-200 cursor-pointer">
+          <div
+            onClick={() => navigate("/buy")}
+            className="flex items-center gap-2 bg-yellow-100 px-4 py-1 rounded-full hover:bg-yellow-200 transition-all duration-200 cursor-pointer"
+          >
             <img className="w-4" src={assets.credit_star} alt="credits" />
             <p className="text-sm font-medium">Credits left: 50</p>
           </div>
@@ -36,9 +40,15 @@ const Navbar = () => {
             />
             <div className="absolute opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 ease-in-out bg-white shadow-lg right-0 top-12 z-10 w-48 rounded-lg py-2 text-sm">
               <ul className="text-center">
-                <li className="px-4 py-2 hover:bg-gray-100 transition cursor-pointer">Profile</li>
-                <li className="px-4 py-2 hover:bg-gray-100 transition cursor-pointer">Buy Credits</li>
-                <li className="px-4 py-2 hover:bg-gray-100 transition cursor-pointer">Logout</li>
+                <li className="px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
+                  Profile
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
+                  Buy Credits
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
+                  Logout
+                </li>
               </ul>
             </div>
           </div>
