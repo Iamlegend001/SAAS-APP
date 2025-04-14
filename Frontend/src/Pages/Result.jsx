@@ -1,37 +1,51 @@
-import React, { useState } from 'react'
-import { assets } from '../assets/assets'
+import React, { useState } from 'react';
+import { assets } from '../assets/assets';
 
 const Result = () => {
-  const [image, setImage] = useState(assets.sample_img_1)
-  const [isImageLoading, setIsImageLoading] = useState(false)
-  const [Loading, setLoading] = useState(false)
-  const [input, setInput] = useState("")
+  const [image, setImage] = useState(assets.sample_img_1);
+  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [Loading, setLoading] = useState(false);
+  const [input, setInput] = useState("");
+  const [error, setError] = useState(""); // To handle any error in generation
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!input.trim()) return
+    e.preventDefault();
+    if (!input.trim()) return;
 
-    setIsImageLoading(true)
-    setLoading(true)
+    setIsImageLoading(true);
+    setLoading(true);
+    setError(""); // Clear previous errors
 
-    // Simulate image generation
+    // Simulate image generation with a timeout
     setTimeout(() => {
-      setImage(assets.sample_img_1) // Replace with real generated image
-      setIsImageLoading(false)
-      setLoading(false)
-    }, 2000)
-  }
+      if (Math.random() < 0.5) {  // Simulating a random failure
+        setError("Image generation failed. Please try again.");
+        setIsImageLoading(false);
+        setLoading(false);
+      } else {
+        setImage(assets.sample_img_1); // Replace with actual generated image
+        setIsImageLoading(false);
+        setLoading(false);
+      }
+    }, 2000);
+  };
 
   const handleGenerateAnother = () => {
-    setIsImageLoading(true)
-    setInput("")
+    setIsImageLoading(true);
+    setInput("");
+    setError(""); // Clear error if generating another image
 
     // Simulate new generation
     setTimeout(() => {
-      setImage(assets.sample_img_1) // Replace with actual logic
-      setIsImageLoading(false)
-    }, 2000)
-  }
+      if (Math.random() < 0.5) {  // Simulating a random failure
+        setError("Image generation failed. Please try again.");
+        setIsImageLoading(false);
+      } else {
+        setImage(assets.sample_img_1); // Replace with actual logic
+        setIsImageLoading(false);
+      }
+    }, 2000);
+  };
 
   return (
     <form
@@ -50,12 +64,19 @@ const Result = () => {
       </div>
 
       {Loading && (
-        <p className="text-center text-gray-700 font-semibold text-lg animate-pulse">
+        <div className="text-center text-gray-700 font-semibold text-lg animate-pulse">
+          <span className="loader"></span> {/* A custom loader */}
           Loading...
-        </p>
+        </div>
       )}
 
-      {!isImageLoading && (
+      {error && (
+        <div className="text-center text-red-600 font-semibold text-lg">
+          {error}
+        </div>
+      )}
+
+      {!isImageLoading && !error && (
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <input
             type="text"
@@ -73,7 +94,7 @@ const Result = () => {
         </div>
       )}
 
-      {!isImageLoading && (
+      {!isImageLoading && !error && (
         <div className="flex justify-center gap-4 pt-6 border-t border-gray-300">
           <button
             type="button"
@@ -93,7 +114,7 @@ const Result = () => {
         </div>
       )}
     </form>
-  )
-}
+  );
+};
 
-export default Result
+export default Result;
