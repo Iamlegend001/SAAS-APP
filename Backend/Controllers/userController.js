@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    return res.json({
+    res.json({
       success: true,
       message: { name: user.name },
       token,
@@ -51,10 +51,20 @@ const loginUser = async (req, res) => {
       return res.json({ success: false, message: "User not found" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (isMatch) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      res.json({
+        success: true,
+        message: { name: user.name },
+        token,
+      });
+    } else {
       return res.json({ success: false, message: "Invalid credentials" });
     }
   } catch (error) {
+    console.log(error)
     res.json({ success: false, message: error.message });
   }
 };
+
+export { registerUser, loginUser };
